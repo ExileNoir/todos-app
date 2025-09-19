@@ -2,6 +2,7 @@ package com.infernalwhaler.todosapp.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,25 +22,34 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(nullable = false)
+    private Long id;
+
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
+
     @Column(unique = true, length = 100, nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
-    @CreationTimestamp
-    @Column(updatable = false, name = "updated_at")
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private Date updatedAt;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_authorities",
     joinColumns = @JoinColumn(name = "user_id"))
     private List<Authority> authorities;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Todos> todos;
 
