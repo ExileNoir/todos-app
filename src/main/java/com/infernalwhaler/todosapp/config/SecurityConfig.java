@@ -61,7 +61,10 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "/swagger-resources/**",
                                         "/webjars/**",
-                                        "/docs").permitAll())
+                                        "/docs")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptionHandling
                         -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()))

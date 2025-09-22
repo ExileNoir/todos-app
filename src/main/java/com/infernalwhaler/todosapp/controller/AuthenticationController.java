@@ -31,7 +31,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     @Operation(summary = "Register a user", description = "Create new user in database")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@Valid @RequestBody RegisterRequest registerRequest) throws Exception {
+    public void register(@RequestBody @Valid RegisterRequest registerRequest) throws Exception {
         authenticationService.register(registerRequest);
     }
 
