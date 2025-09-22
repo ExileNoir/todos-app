@@ -10,12 +10,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "todos")
-public class Todos {
+public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -34,7 +34,7 @@ public class Todos {
     private User owner;
 
 
-    public Todos(String title, String description, int priority, boolean complete, User owner) {
+    public Todo(String title, String description, int priority, boolean complete, User owner) {
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -42,7 +42,7 @@ public class Todos {
         this.owner = owner;
     }
 
-    public Todos() {
+    public Todo() {
 
     }
 

@@ -23,7 +23,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String firstName;
@@ -46,12 +46,11 @@ public class User implements UserDetails {
     private Date updatedAt;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_authorities",
-    joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_authorities", joinColumns = @JoinColumn(name = "user_id"))
     private List<Authority> authorities;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Todos> todos;
+    private List<Todo> todos;
 
 
 
