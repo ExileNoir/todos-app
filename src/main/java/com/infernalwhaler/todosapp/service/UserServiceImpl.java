@@ -4,10 +4,12 @@ import com.infernalwhaler.todosapp.dto.UserResponse;
 import com.infernalwhaler.todosapp.model.Authority;
 import com.infernalwhaler.todosapp.model.User;
 import com.infernalwhaler.todosapp.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.AccessDeniedException;
 
@@ -29,6 +31,26 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse getUser() throws AccessDeniedException {
+        var user = getAuthenticatedUser();
+
+        return new UserResponse(
+                user.getId(),
+                user.getFirstName() + " " + user.getLastName(),
+                user.getEmail(),
+                user.getAuthorities().stream().map(auth -> (Authority) auth).toList());
+    }
+
+    @Override
+    public void deleteUser() throws AccessDeniedException {
+        var user = getAuthenticatedUser();
+
+        if (isLastAdmin(user)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Admin cannot delete itself");
+        }
+        userRepository.delete(user);
+    }
+
+    private User getAuthenticatedUser() throws AccessDeniedException {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null
@@ -36,12 +58,17 @@ public class UserServiceImpl implements UserService {
                 || authentication.getPrincipal().equals("anonymousUser")) {
             throw new AccessDeniedException("Authentication required");
         }
-        var user = (User) authentication.getPrincipal();
+        return (User) authentication.getPrincipal();
+    }
 
-        return new UserResponse(
-                user.getId(),
-                user.getFirstName() + " " + user.getLastName(),
-                user.getEmail(),
-                user.getAuthorities().stream().map(auth -> (Authority) auth).toList());
+    private boolean isLastAdmin(User user) {
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+
+        if (isAdmin) {
+            long adminCount = userRepository.countAdminUsers();
+            return adminCount <= 1;
+        }
+        return false;
     }
 }

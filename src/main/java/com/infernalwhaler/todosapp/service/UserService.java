@@ -13,4 +13,6 @@ import java.nio.file.AccessDeniedException;
 public interface UserService {
 
     UserResponse getUser() throws AccessDeniedException;
+
+    void deleteUser() throws AccessDeniedException;
 }
