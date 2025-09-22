@@ -1,5 +1,7 @@
 package com.infernalwhaler.todosapp.controller;
 
+import com.infernalwhaler.todosapp.dto.AuthenticationRequest;
+import com.infernalwhaler.todosapp.dto.AuthenticationResponse;
 import com.infernalwhaler.todosapp.dto.RegisterRequest;
 import com.infernalwhaler.todosapp.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +33,13 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@Valid @RequestBody RegisterRequest registerRequest) throws Exception {
         authenticationService.register(registerRequest);
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login a user", description = "Operations related to register & login")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthenticationResponse login(@RequestBody @Valid AuthenticationRequest authRequest) throws Exception {
+        return authenticationService.login(authRequest);
     }
 
 }

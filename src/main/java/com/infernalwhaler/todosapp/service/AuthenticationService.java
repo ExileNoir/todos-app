@@ -1,5 +1,7 @@
 package com.infernalwhaler.todosapp.service;
 
+import com.infernalwhaler.todosapp.dto.AuthenticationRequest;
+import com.infernalwhaler.todosapp.dto.AuthenticationResponse;
 import com.infernalwhaler.todosapp.dto.RegisterRequest;
 
 /**
@@ -11,4 +13,6 @@ import com.infernalwhaler.todosapp.dto.RegisterRequest;
 public interface AuthenticationService {
 
     void register(RegisterRequest input) throws Exception;
+
+    AuthenticationResponse login(AuthenticationRequest request);
 }
