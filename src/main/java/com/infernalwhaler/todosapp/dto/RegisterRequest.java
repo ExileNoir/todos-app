@@ -1,4 +1,4 @@
-package com.infernalwhaler.todosapp.model;
+package com.infernalwhaler.todosapp.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

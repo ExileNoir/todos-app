@@ -1,7 +1,7 @@
 package com.infernalwhaler.todosapp.service;
 
 import com.infernalwhaler.todosapp.model.Authority;
-import com.infernalwhaler.todosapp.model.RegisterRequest;
+import com.infernalwhaler.todosapp.dto.RegisterRequest;
 import com.infernalwhaler.todosapp.model.User;
 import com.infernalwhaler.todosapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,8 +1,7 @@
 package com.infernalwhaler.todosapp.service;
 
-import com.infernalwhaler.todosapp.model.RegisterRequest;
+import com.infernalwhaler.todosapp.dto.RegisterRequest;
 import com.infernalwhaler.todosapp.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

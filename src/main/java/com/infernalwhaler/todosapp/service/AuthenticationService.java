@@ -1,6 +1,6 @@
 package com.infernalwhaler.todosapp.service;
 
-import com.infernalwhaler.todosapp.model.RegisterRequest;
+import com.infernalwhaler.todosapp.dto.RegisterRequest;
 
 /**
  * @author Sdeseure
