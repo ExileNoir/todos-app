@@ -1,6 +1,5 @@
 package com.infernalwhaler.todosapp.repository;
 
-import com.infernalwhaler.todosapp.dto.UserResponse;
 import com.infernalwhaler.todosapp.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

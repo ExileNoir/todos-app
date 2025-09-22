@@ -1,8 +1,8 @@
 package com.infernalwhaler.todosapp.controller;
 
-import com.infernalwhaler.todosapp.dto.AuthenticationRequest;
-import com.infernalwhaler.todosapp.dto.AuthenticationResponse;
-import com.infernalwhaler.todosapp.dto.RegisterRequest;
+import com.infernalwhaler.todosapp.dto.requests.AuthenticationRequest;
+import com.infernalwhaler.todosapp.dto.responses.AuthenticationResponse;
+import com.infernalwhaler.todosapp.dto.requests.RegisterRequest;
 import com.infernalwhaler.todosapp.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

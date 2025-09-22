@@ -1,4 +1,4 @@
-package com.infernalwhaler.todosapp.dto;
+package com.infernalwhaler.todosapp.dto.requests;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

@@ -1,7 +1,7 @@
 package com.infernalwhaler.todosapp.service;
 
-import com.infernalwhaler.todosapp.dto.PasswordUpdateRequest;
-import com.infernalwhaler.todosapp.dto.UserResponse;
+import com.infernalwhaler.todosapp.dto.requests.PasswordUpdateRequest;
+import com.infernalwhaler.todosapp.dto.responses.UserResponse;
 
 import java.nio.file.AccessDeniedException;
 

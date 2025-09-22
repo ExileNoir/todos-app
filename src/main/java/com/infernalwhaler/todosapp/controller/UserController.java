@@ -1,7 +1,7 @@
 package com.infernalwhaler.todosapp.controller;
 
-import com.infernalwhaler.todosapp.dto.PasswordUpdateRequest;
-import com.infernalwhaler.todosapp.dto.UserResponse;
+import com.infernalwhaler.todosapp.dto.requests.PasswordUpdateRequest;
+import com.infernalwhaler.todosapp.dto.responses.UserResponse;
 import com.infernalwhaler.todosapp.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,14 +1,14 @@
 package com.infernalwhaler.todosapp.service;
 
-import com.infernalwhaler.todosapp.dto.PasswordUpdateRequest;
-import com.infernalwhaler.todosapp.dto.UserResponse;
+import com.infernalwhaler.todosapp.dto.requests.PasswordUpdateRequest;
+import com.infernalwhaler.todosapp.dto.responses.UserResponse;
 import com.infernalwhaler.todosapp.model.Authority;
 import com.infernalwhaler.todosapp.model.User;
 import com.infernalwhaler.todosapp.repository.UserRepository;
+import com.infernalwhaler.todosapp.util.FindAuthenticatedUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,16 +27,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FindAuthenticatedUser findAuthenticatedUser;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, FindAuthenticatedUser findAuthenticatedUser) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.findAuthenticatedUser = findAuthenticatedUser;
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponse getUser() throws AccessDeniedException {
-        var user = getAuthenticatedUser();
+        var user = findAuthenticatedUser.getAuthenticatedUser();
 
         return new UserResponse(
                 user.getId(),
@@ -47,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser() throws AccessDeniedException {
-        var user = getAuthenticatedUser();
+        var user = findAuthenticatedUser.getAuthenticatedUser();
 
         if (isLastAdmin(user)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Admin cannot delete itself");
@@ -57,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(PasswordUpdateRequest passwordUpdateRequest) throws AccessDeniedException {
-        var user = getAuthenticatedUser();
+        var user = findAuthenticatedUser.getAuthenticatedUser();
 
         if (!isOldPasswordCorrect(user.getPassword(), passwordUpdateRequest.getOldPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is incorrect");
@@ -81,17 +83,6 @@ public class UserServiceImpl implements UserService {
             return adminCount <= 1;
         }
         return false;
-    }
-
-    private User getAuthenticatedUser() throws AccessDeniedException {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null
-                || !authentication.isAuthenticated()
-                || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new AccessDeniedException("Authentication required");
-        }
-        return (User) authentication.getPrincipal();
     }
 
     private boolean isOldPasswordCorrect(final String currentEncodedPassword, final String confirmedOldPassword) {

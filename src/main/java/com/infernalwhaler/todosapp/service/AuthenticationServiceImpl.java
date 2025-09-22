@@ -1,8 +1,8 @@
 package com.infernalwhaler.todosapp.service;
 
-import com.infernalwhaler.todosapp.dto.AuthenticationRequest;
-import com.infernalwhaler.todosapp.dto.AuthenticationResponse;
-import com.infernalwhaler.todosapp.dto.RegisterRequest;
+import com.infernalwhaler.todosapp.dto.requests.AuthenticationRequest;
+import com.infernalwhaler.todosapp.dto.responses.AuthenticationResponse;
+import com.infernalwhaler.todosapp.dto.requests.RegisterRequest;
 import com.infernalwhaler.todosapp.model.Authority;
 import com.infernalwhaler.todosapp.model.User;
 import com.infernalwhaler.todosapp.repository.UserRepository;

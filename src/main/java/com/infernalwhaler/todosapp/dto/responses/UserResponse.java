@@ -1,4 +1,4 @@
-package com.infernalwhaler.todosapp.dto;
+package com.infernalwhaler.todosapp.dto.responses;
 
 import com.infernalwhaler.todosapp.model.Authority;
 
