@@ -1,5 +1,6 @@
 package com.infernalwhaler.todosapp.repository;
 
+import com.infernalwhaler.todosapp.dto.UserResponse;
 import com.infernalwhaler.todosapp.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -20,4 +21,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT COUNT(u) FROM User u JOIN u.authorities a WHERE a.authority = 'ROLE_ADMIN'")
     long countAdminUsers();
+
+
 }

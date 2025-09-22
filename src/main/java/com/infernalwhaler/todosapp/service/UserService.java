@@ -1,5 +1,6 @@
 package com.infernalwhaler.todosapp.service;
 
+import com.infernalwhaler.todosapp.dto.PasswordUpdateRequest;
 import com.infernalwhaler.todosapp.dto.UserResponse;
 
 import java.nio.file.AccessDeniedException;
@@ -15,4 +16,6 @@ public interface UserService {
     UserResponse getUser() throws AccessDeniedException;
 
     void deleteUser() throws AccessDeniedException;
+
+    void updatePassword(PasswordUpdateRequest passwordUpdateRequest) throws AccessDeniedException;
 }

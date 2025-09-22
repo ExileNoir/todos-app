@@ -1,5 +1,6 @@
 package com.infernalwhaler.todosapp.service;
 
+import com.infernalwhaler.todosapp.dto.PasswordUpdateRequest;
 import com.infernalwhaler.todosapp.dto.UserResponse;
 import com.infernalwhaler.todosapp.model.Authority;
 import com.infernalwhaler.todosapp.model.User;
@@ -7,6 +8,8 @@ import com.infernalwhaler.todosapp.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,10 +25,12 @@ import java.nio.file.AccessDeniedException;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -50,6 +55,34 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
+    @Override
+    public void updatePassword(PasswordUpdateRequest passwordUpdateRequest) throws AccessDeniedException {
+        var user = getAuthenticatedUser();
+
+        if (!isOldPasswordCorrect(user.getPassword(), passwordUpdateRequest.getOldPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is incorrect");
+        }
+
+        if (!isNewPasswordConfirmed(passwordUpdateRequest.getNewPassword(), passwordUpdateRequest.getConfirmNewPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New passwords doe not match");
+        }
+
+        if (!isNewPasswordDifferent(passwordUpdateRequest.getOldPassword(), passwordUpdateRequest.getNewPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old and New passwords must be different");
+        }
+    }
+
+    private boolean isLastAdmin(final User user) {
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+
+        if (isAdmin) {
+            long adminCount = userRepository.countAdminUsers();
+            return adminCount <= 1;
+        }
+        return false;
+    }
+
     private User getAuthenticatedUser() throws AccessDeniedException {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -61,14 +94,16 @@ public class UserServiceImpl implements UserService {
         return (User) authentication.getPrincipal();
     }
 
-    private boolean isLastAdmin(User user) {
-        boolean isAdmin = user.getAuthorities().stream()
-                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
-
-        if (isAdmin) {
-            long adminCount = userRepository.countAdminUsers();
-            return adminCount <= 1;
-        }
-        return false;
+    private boolean isOldPasswordCorrect(final String currentEncodedPassword, final String confirmedOldPassword) {
+        return passwordEncoder.matches(confirmedOldPassword,currentEncodedPassword);
     }
+
+    private boolean isNewPasswordConfirmed(final String newPassword, final String confirmNewPassword) {
+        return newPassword.equals(confirmNewPassword);
+    }
+
+    private boolean isNewPasswordDifferent(final String confirmedOldPassword, final String newPassword) {
+        return !newPassword.equals(confirmedOldPassword);
+    }
+
 }
