@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Sdeseure
@@ -17,4 +18,6 @@ import java.util.List;
 public interface TodoRepository extends CrudRepository<Todo, Long> {
 
     List<Todo> findByOwner(User owner);
+
+    Optional<Todo> findByIdAndOwner(Long id, User owner);
 }

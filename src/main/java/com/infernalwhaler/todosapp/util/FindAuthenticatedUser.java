@@ -1,8 +1,6 @@
 package com.infernalwhaler.todosapp.util;
 
 import com.infernalwhaler.todosapp.model.User;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.nio.file.AccessDeniedException;
 
